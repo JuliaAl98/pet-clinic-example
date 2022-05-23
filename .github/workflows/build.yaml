@@ -41,10 +41,12 @@ jobs:
   
     - name: Compile, build and push
       run: |
-        #### AUFGABE 3 DOCKER BUILD UND PUSH
-          # an dieser Stelle wird die Aufgabe 3 bearbeitet: heroku login, docker build, docker push
-        
+        heroku container:login 
+        mvn package
+        docker build --tag registry.heroku.com/${APP_NAME}/web -f Dockerfile .
+        docker push registry.heroku.com/${APP_NAME}/web
     - name: Release
       run: |
-        #### AUFGABE 4 DEPLOYMENT AUF HEROKU
-          # hier wird die 4. Aufgabe bearbeitet: Release der App auf Heroku
+        heroku container:login 
+        heroku stack:set container --app ${APP_NAME}
+        heroku container:release web --app ${APP_NAME}
